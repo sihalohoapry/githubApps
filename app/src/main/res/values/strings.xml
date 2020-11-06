@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">Aplikasi GitHub User</string>
+    <string name="pengaturan">Pengaturan</string>
+    <string name="favorit">Favorit</string>
+    <string name="username">Username</string>
+    <string name="setting">Setting</string>
+    <string name="favorite">Favorite</string>
+    <string name="detail_user">Detail User</string>
+    <string name="github_user">GitHub User</string>
+    <string name="dummy">Dummy</string>
+    <string name="nolocation">No Location</string>
+    <string name="foto_profile">foto_profile</string>
+    <string name="background">background</string>
+    <string name="followers">Followers</string>
+    <string name="following">Following</string>
+    <string name="tab_text_1">Followers</string>
+    <string name="tab_text_2">Following</string>
+    <string name="daily_remainder">Daily Remainder</string>
+
+    <string name="one_time_alarm">One Time Alarm</string>
+    <string name="alarm_date">Tanggal Alarm</string>
+    <string name="set_one_time_alarm">Set One Time Alarm</string>
+    <string name="alarm_message">Pesan Alarm</string>
+    <string name="repeating_alarm">Repeating Alarm</string>
+    <string name="set_repeating_alarm">Set Repeating Alarm</string>
+    <string name="cancel_alarm">Batalkan Alarm</string>
+    <string name="alarm_time">Waktu Alarm</string>
+    <string name="hapus">Hapus</string>
+
+</resources>

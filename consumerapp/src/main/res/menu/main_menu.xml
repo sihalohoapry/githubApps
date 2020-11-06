@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menu_setting"
+        android:icon="@drawable/ic_setting_white"
+        android:title="@string/pengaturan"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/menu_favorit"
+        android:icon="@drawable/ic_favorite_white"
+        android:title="@string/favorit"
+        app:showAsAction="always" />
+
+</menu>
