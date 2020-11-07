@@ -1,5 +1,6 @@
 package com.sihaloho.aplikasigithubuser.retrofit
 
+import com.sihaloho.aplikasigithubuser.modul.SearchModul
 import com.sihaloho.aplikasigithubuser.modul.UserDetailModul
 import com.sihaloho.aplikasigithubuser.modul.UserModul
 import retrofit2.Call
@@ -13,7 +14,7 @@ interface Api {
     fun getUserGitHub(): Call<ArrayList<UserModul>>
 
     @GET("search/users")
-    fun getSearchUser(@Query("login") q : String): Call<UserModul>
+    fun getSearchUser(@Query("q") q : String): Call<SearchModul>
 
     @GET
     fun getDetailUser(@Url url: String): Call<UserDetailModul>

@@ -26,5 +26,7 @@
     <string name="cancel_alarm">Batalkan Alarm</string>
     <string name="alarm_time">Waktu Alarm</string>
     <string name="hapus">Hapus</string>
+    <string name="splashscreen">SplashScreen</string>
+    <string name="for_final_project_dicoding">For Final Project Dicoding</string>
 
 </resources>
