@@ -1,14 +1,14 @@
 package com.sihaloho.aplikasigithubuser.sqlite
 
-import android.util.Log
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.sihaloho.aplikasigithubuser.DetailUserActivity
 import com.sihaloho.aplikasigithubuser.R
-import kotlinx.android.synthetic.main.activity_detail_user.*
 import kotlinx.android.synthetic.main.item_fav.view.*
 
 class FavoriteAdapter : RecyclerView.Adapter<FavoriteAdapter.CardViewViewHolder>() {
@@ -33,11 +33,16 @@ class FavoriteAdapter : RecyclerView.Adapter<FavoriteAdapter.CardViewViewHolder>
             with(itemView) {
                 tv_nama.text = favItem.login
                 tv_link.text = favItem.html_url
+                val login = favItem.login.toString()
                 Glide.with(context)
                     .load(favItem.avatar_url)
                     .apply(RequestOptions.circleCropTransform())
                     .into(civ_foto)
-
+                itemView.setOnClickListener {
+                    val intent = Intent(context, DetailUserActivity::class.java)
+                    intent.putExtra(DetailUserActivity.EXTRA_NAME, login)
+                    context.startActivity(intent)
+                }
 
             }
         }

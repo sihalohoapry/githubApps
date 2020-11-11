@@ -20,7 +20,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SplashScreen"
+        <activity android:name=".sqlite.DetailFromFav"></activity>
+        <activity
+            android:name=".SplashScreen"
             android:theme="@style/AppThemeMaterialDesainNo">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -54,9 +56,7 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/github_user"
-            android:theme="@style/AppThemeMaterialDesain">
-
-        </activity>
+            android:theme="@style/AppThemeMaterialDesain"></activity>
 
         <meta-data
             android:name="preloaded_fonts"
@@ -72,7 +72,7 @@
             android:authorities="com.sihaloho.aplikasigithubuser"
             android:exported="true"
             android:readPermission="com.sihaloho.aplikasigithubuser.READ_DATABASE"
-            android:writePermission="com.sihaloho.aplikasigithubuser.WRITE_DATABASE"></provider>
+            android:writePermission="com.sihaloho.aplikasigithubuser.WRITE_DATABASE" />
     </application>
 
 </manifest>
