@@ -5,12 +5,13 @@ import android.content.ContentValues
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -31,8 +32,7 @@ import retrofit2.Response
 class DetailUserActivity : AppCompatActivity() {
 
 
-    private val listFolowing = ArrayList<UserModul>()
-    private val listFollowers = ArrayList<UserModul>()
+
 
     private lateinit var progressBar: ProgressDialog
 
@@ -43,22 +43,25 @@ class DetailUserActivity : AppCompatActivity() {
     private lateinit var uriWithId: Uri
 
     companion object{
+        val EXTRA_USER = "extra_user"
         const val RESULT_ADD = 101
         const val EXTRA_FAV = "extra_fav"
         const val EXTRA_POSITION_FAV = "extra_position_fav"
     }
-
+    private lateinit var adapter: AdapterUser
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail_user)
 
         progressBar = ProgressDialog(this)
         progressBar.setMessage("Mohon Tunggu")
-
-
+        adapter = AdapterUser()
+        adapter.notifyDataSetChanged()
         getDetailUSer()
+
         rv_follow.setHasFixedSize(true)
         rv_follow.layoutManager = LinearLayoutManager(this)
+        rv_follow.adapter = adapter
         getFollowers()
 
 
@@ -71,6 +74,9 @@ class DetailUserActivity : AppCompatActivity() {
         cv_following.setOnClickListener {
             cv_followers.setCardBackgroundColor(Color.parseColor("#a1a1a1"))
             cv_following.setCardBackgroundColor(Color.WHITE)
+            rv_follow.setHasFixedSize(true)
+            rv_follow.layoutManager = LinearLayoutManager(this)
+            rv_follow.adapter = adapter
             getFollowing()
         }
 
@@ -98,7 +104,7 @@ class DetailUserActivity : AppCompatActivity() {
     }
 
     private fun addanddelete() {
-        val data = intent.getParcelableExtra<UserModul?>("data")
+        val data = intent.getParcelableExtra<UserModul?>(EXTRA_USER)
         val id = data?.id
         val login = data?.login
         val avatar = data?.avatar_url
@@ -134,76 +140,38 @@ class DetailUserActivity : AppCompatActivity() {
         }
     }
 
-    private fun getFollowing() {
-        progressBar.show()
-        val data = intent.getParcelableExtra<UserModul?>("data")
-        val login = data?.login
-        listFolowing.clear()
-        RetrofitClient.instance.getFollow("https://api.github.com/users/$login/following").enqueue(object : Callback<ArrayList<UserModul>>{
-            override fun onFailure(call: Call<ArrayList<UserModul>>, t: Throwable) {
-                Toast.makeText(this@DetailUserActivity, "$t", Toast.LENGTH_SHORT).show()
+    private fun getFollowers() {
+        val data = intent.getParcelableExtra<UserModul?>(EXTRA_USER)
+        val urlFollowers = data?.followers_url.toString()
+        val followViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(FollowViewModel::class.java)
+        followViewModel.setFollowers(urlFollowers)
+        followViewModel.getFollowe().observe(this, Observer { userItems ->
+            if (userItems != null) {
+                adapter.setData(userItems)
             }
-
-            override fun onResponse(
-                call: Call<ArrayList<UserModul>>,
-                response: Response<ArrayList<UserModul>>
-            ) {
-                progressBar.dismiss()
-               response.body()?.let { listFolowing.addAll(it) }
-                val adapter = AdapterUser(listFolowing){
-                    if (listFolowing.isNotEmpty()){
-                        val intent = Intent(baseContext, DetailUserActivity::class.java)
-                            .putExtra("data", it)
-                        startActivity(intent)
-                        finishAffinity()
-                    }
-                }
-                rv_follow.adapter = adapter
-            }
-
         })
-
     }
 
-    private fun getFollowers() {
-        val data = intent.getParcelableExtra<UserModul?>("data")
-        val url = data?.followers_url
-
-        listFollowers.clear()
-        RetrofitClient.instance.getFollow("$url").enqueue(object : Callback
-        <ArrayList<UserModul>>{
-            override fun onFailure(call: Call<ArrayList<UserModul>>, t: Throwable) {
-                Toast.makeText(this@DetailUserActivity, "$t", Toast.LENGTH_SHORT).show()
+    private fun getFollowing() {
+        val data = intent.getParcelableExtra<UserModul?>(EXTRA_USER)
+        val login = data?.login.toString()
+        val followingViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(FollowingViewModel::class.java)
+        followingViewModel.setFollowing(login)
+        followingViewModel.getFollowing().observe(this, Observer { userItemsFollowing ->
+            if (userItemsFollowing != null) {
+                adapter.setData(userItemsFollowing)
             }
-
-            override fun onResponse(
-                call: Call<ArrayList<UserModul>>,
-                response: Response<ArrayList<UserModul>>
-            ) {
-                progressBar.dismiss()
-                response.body()?.let { listFollowers.addAll(it) }
-                val adapter = AdapterUser(listFollowers){
-                    if (listFolowing.isNotEmpty()){
-                        val intent = Intent(this@DetailUserActivity, DetailUserActivity::class.java)
-                            .putExtra("data", it)
-                        startActivity(intent)
-                    }
-                }
-                rv_follow.adapter = adapter
-            }
-
         })
     }
 
 
     private fun getDetailUSer() {
 
-        listFollowers.clear()
         progressBar.show()
-        val data = intent.getParcelableExtra<UserModul?>("data")
+        val data = intent.getParcelableExtra<UserModul?>(EXTRA_USER)
         val tvLogin = data?.login.toString()
 
-        RetrofitClient.instance.getDetailUser("users/$tvLogin")
+        RetrofitClient.instance.getDetailUser("https://api.github.com/users/$tvLogin")
             .enqueue(object : Callback<UserDetailModul> {
                 override fun onFailure(call: Call<UserDetailModul>, t: Throwable) {
                     Toast.makeText(this@DetailUserActivity, "$t", Toast.LENGTH_LONG).show()
@@ -213,6 +181,7 @@ class DetailUserActivity : AppCompatActivity() {
                     call: Call<UserDetailModul>,
                     response: Response<UserDetailModul>
                 ) {
+
                     if (response.isSuccessful) {
                         val data = response.body()
                         tv_nama.text = data?.name

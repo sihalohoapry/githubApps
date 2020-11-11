@@ -1,11 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorGray"
     tools:context=".MainActivity">
+
+<!--    <ImageView-->
+<!--        android:id="@+id/iv_search"-->
+<!--        android:layout_width="50dp"-->
+<!--        android:layout_height="50dp"-->
+<!--        android:layout_marginTop="24dp"-->
+<!--        android:layout_marginEnd="24dp"-->
+<!--        android:layout_weight="1"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:srcCompat="@drawable/ic_search" />-->
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_list_user"
@@ -14,24 +26,66 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="24dp"
-        android:layout_marginBottom="24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchView"
+        app:layout_constraintTop_toBottomOf="@+id/et_search"
         tools:listitem="@layout/item_list_user" />
 
-    <SearchView
-        android:id="@+id/searchView"
+    <EditText
+        android:id="@+id/et_search"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="24dp"
         android:background="@drawable/shape_black"
+        android:ems="10"
+        android:fontFamily="@font/montserrat"
+        android:hint="Cari User"
+        android:inputType="textPersonName"
+        android:paddingStart="20dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/montserrat"
+        android:gravity="center"
+        android:text="@string/silahkan_ketik_pada_nkolom_pencarian"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_search" />
+
+    <!--    <com.google.android.material.textfield.TextInputLayout-->
+<!--        android:id="@+id/layout_email"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="24dp"-->
+<!--        android:layout_marginEnd="8dp"-->
+<!--        android:background="@drawable/shape"-->
+<!--        android:hint="Cari"-->
+<!--        app:layout_constraintBottom_toBottomOf="@+id/iv_search"-->
+<!--        app:layout_constraintEnd_toStartOf="@+id/iv_search"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="@+id/iv_search">-->
+
+
+<!--        <com.google.android.material.textfield.TextInputEditText-->
+<!--            android:id="@+id/et_search"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:inputType="textEmailAddress" />-->
+
+<!--    </com.google.android.material.textfield.TextInputLayout>-->
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
