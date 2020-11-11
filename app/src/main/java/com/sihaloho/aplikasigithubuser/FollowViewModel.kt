@@ -11,9 +11,9 @@ import retrofit2.Response
 
 class FollowViewModel : ViewModel(){
     val listFollower = MutableLiveData<ArrayList<UserModul>>()
-    fun setFollowers(urlFollowers: String) {
+    fun setFollowers(login: String) {
         val listItems = ArrayList<UserModul>()
-        RetrofitClient.instance.getFollow("$urlFollowers").enqueue(object : Callback<ArrayList<UserModul>> {
+        RetrofitClient.instance.getFollow("https://api.github.com/users/$login/followers").enqueue(object : Callback<ArrayList<UserModul>> {
             override fun onFailure(call: Call<ArrayList<UserModul>>, t: Throwable) {
 
             }

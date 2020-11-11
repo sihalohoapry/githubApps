@@ -27,5 +27,4 @@ interface Api {
     fun getFollow(@Url follow: String): Call<ArrayList<UserModul>>
 
 
-
 }

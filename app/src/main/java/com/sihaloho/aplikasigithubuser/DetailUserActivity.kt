@@ -10,12 +10,8 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.sihaloho.aplikasigithubuser.adapter.AdapterUser
-import com.sihaloho.aplikasigithubuser.fragment.FollowingFragment
 import com.sihaloho.aplikasigithubuser.fragment.SectionsPagerAdapter
 import com.sihaloho.aplikasigithubuser.menu.SettingActivity
 import com.sihaloho.aplikasigithubuser.modul.UserDetailModul
@@ -23,7 +19,6 @@ import com.sihaloho.aplikasigithubuser.modul.UserModul
 import com.sihaloho.aplikasigithubuser.retrofit.RetrofitClient
 import com.sihaloho.aplikasigithubuser.sqlite.DatabaseContract
 import com.sihaloho.aplikasigithubuser.sqlite.DatabaseContract.FavoriteColumns.Companion.CONTENT_URI
-import com.sihaloho.aplikasigithubuser.sqlite.DetailFromFav
 import com.sihaloho.aplikasigithubuser.sqlite.Favorite
 import com.sihaloho.aplikasigithubuser.sqlite.FavoriteHelper
 import kotlinx.android.synthetic.main.activity_detail_user.*
@@ -42,15 +37,12 @@ class DetailUserActivity : AppCompatActivity() {
     private lateinit var uriWithId: Uri
 
     companion object{
-        const val USERNAME = "username"
-        val EXTRA_USER = "extra_user"
+        const val EXTRA_USER = "extra_user"
         const val EXTRA_NAME = "extra_name"
         const val EXTRA_FAV = "extra_fav"
         const val EXTRA_POSITION_FAV = "extra_position_fav"
-        private var username: String? = null
 
     }
-    private lateinit var adapter: AdapterUser
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail_user)
@@ -62,31 +54,13 @@ class DetailUserActivity : AppCompatActivity() {
 
         progressBar = ProgressDialog(this)
         progressBar.setMessage("Mohon Tunggu")
-        adapter = AdapterUser()
-        adapter.notifyDataSetChanged()
         getDetailUSer()
-        val data = intent.getParcelableExtra<UserModul?>(EXTRA_USER)
-        val login = data?.login.toString()
-        textView4.text = login
-        val followingFragment = FollowingFragment.newInstance(login)
-        val fragmentManager = supportFragmentManager
-        val framentTransaction = fragmentManager.beginTransaction()
-        framentTransaction.add(R.id.view_pager, followingFragment)
-        framentTransaction.commit()
-
-//        rv_follow.setHasFixedSize(true)
-//        rv_follow.layoutManager = LinearLayoutManager(this)
-//        rv_follow.adapter = adapter
-//        getFollowers()
-
-
 
         openSQL()
 
         fab_favorite.setOnClickListener {
             addanddelete()
         }
-
 
     }
 
@@ -136,39 +110,19 @@ class DetailUserActivity : AppCompatActivity() {
         }
     }
 
-//    private fun getFollowers() {
-//        val data = intent.getParcelableExtra<UserModul?>(EXTRA_USER)
-//        val urlFollowers = data?.followers_url.toString()
-//        val followViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(FollowViewModel::class.java)
-//        followViewModel.setFollowers(urlFollowers)
-//        followViewModel.getFollowe().observe(this, Observer { userItems ->
-//            if (userItems != null) {
-//                adapter.setData(userItems)
-//            }
-//        })
-//    }
-
-    private fun getFollowing() {
-        val data = intent.getParcelableExtra<UserModul?>(EXTRA_USER)
-        val login = data?.login.toString()
-        val followingViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(FollowingViewModel::class.java)
-        followingViewModel.setFollowing(login)
-        followingViewModel.getFollowing().observe(this, Observer { userItemsFollowing ->
-            if (userItemsFollowing != null) {
-                adapter.setData(userItemsFollowing)
-            }
-        })
-    }
-
 
     private fun getDetailUSer() {
 
         progressBar.show()
         val data = intent.getParcelableExtra<UserModul?>(EXTRA_USER)
 
-        if (data == null){
-            val login =intent.getStringExtra(DetailFromFav.EXTRA_NAME)
-            RetrofitClient.instance.getDetailUser("https://api.github.com/users/$login")
+        if (data != null)
+        {
+            val data = intent.getParcelableExtra<UserModul?>(EXTRA_USER)
+
+            val tvLogin = data?.login.toString()
+
+            RetrofitClient.instance.getDetailUser("https://api.github.com/users/$tvLogin")
                 .enqueue(object : Callback<UserDetailModul> {
                     override fun onFailure(call: Call<UserDetailModul>, t: Throwable) {
                         Toast.makeText(this@DetailUserActivity, "$t", Toast.LENGTH_LONG).show()
@@ -178,7 +132,7 @@ class DetailUserActivity : AppCompatActivity() {
                         call: Call<UserDetailModul>,
                         response: Response<UserDetailModul>
                     ) {
-                        fab_favorite.visibility = View.GONE
+
                         if (response.isSuccessful) {
                             val data = response.body()
                             tv_nama.text = data?.name
@@ -202,21 +156,22 @@ class DetailUserActivity : AppCompatActivity() {
 
 
                 })
-        }else{
-            val tvLogin = data?.login.toString()
-
-            RetrofitClient.instance.getDetailUser("https://api.github.com/users/$tvLogin")
+        }
+        if (data == null){
+            val login =intent.getStringExtra(EXTRA_NAME)
+            RetrofitClient.instance.getDetailUser("https://api.github.com/users/$login")
                 .enqueue(object : Callback<UserDetailModul> {
                     override fun onFailure(call: Call<UserDetailModul>, t: Throwable) {
                         Toast.makeText(this@DetailUserActivity, "$t", Toast.LENGTH_LONG).show()
                     }
+
 
                     override fun onResponse(
                         call: Call<UserDetailModul>,
                         response: Response<UserDetailModul>
                     ) {
 
-
+                        fab_favorite.visibility = View.GONE
                         if (response.isSuccessful) {
                             val data = response.body()
                             tv_nama.text = data?.name
