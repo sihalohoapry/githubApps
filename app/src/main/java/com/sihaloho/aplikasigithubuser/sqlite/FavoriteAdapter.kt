@@ -31,9 +31,10 @@ class FavoriteAdapter : RecyclerView.Adapter<FavoriteAdapter.CardViewViewHolder>
     inner class CardViewViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(favItem: Favorite) {
             with(itemView) {
-                tv_nama.text = favItem.login
+                tvNama.text = favItem.login
                 tv_link.text = favItem.html_url
                 val login = favItem.login.toString()
+                val id = favItem.id.toString()
                 Glide.with(context)
                     .load(favItem.avatar_url)
                     .apply(RequestOptions.circleCropTransform())
@@ -41,6 +42,7 @@ class FavoriteAdapter : RecyclerView.Adapter<FavoriteAdapter.CardViewViewHolder>
                 itemView.setOnClickListener {
                     val intent = Intent(context, DetailUserActivity::class.java)
                     intent.putExtra(DetailUserActivity.EXTRA_NAME, login)
+                    intent.putExtra(DetailUserActivity.EXTRA_ID, id)
                     context.startActivity(intent)
                 }
 

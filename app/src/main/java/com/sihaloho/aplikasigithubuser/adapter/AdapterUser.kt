@@ -37,7 +37,7 @@ class AdapterUser : RecyclerView.Adapter<AdapterUser.Holder>(){
 
     inner class Holder(view : View) : RecyclerView.ViewHolder(view){
 
-        private var nama : TextView = view.findViewById(R.id.tv_nama)
+        private var nama : TextView = view.findViewById(R.id.tvNama)
         private var link : TextView = view.findViewById(R.id.tv_link)
         private var civprovile : ImageView = view.findViewById(R.id.civ_foto)
 

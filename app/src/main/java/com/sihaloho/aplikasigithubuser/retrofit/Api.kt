@@ -11,19 +11,19 @@ import retrofit2.http.Url
 
 interface Api {
     @GET("users")
-    @Headers("Authorization:4092804f73496360affddeb05df2dd7d5ecf5383")
+    @Headers("Authorization: Token 4092804f73496360affddeb05df2dd7d5ecf5383")
     fun getUserGitHub(): Call<ArrayList<UserModul>>
 
     @GET("search/users")
-    @Headers("Authorization:4092804f73496360affddeb05df2dd7d5ecf5383")
+    @Headers("Authorization: Token 4092804f73496360affddeb05df2dd7d5ecf5383")
     fun getSearchUser(@Query("q") q : String): Call<SearchModul>
 
     @GET
-    @Headers("Authorization:4092804f73496360affddeb05df2dd7d5ecf5383")
+    @Headers("Authorization: Token 4092804f73496360affddeb05df2dd7d5ecf5383")
     fun getDetailUser(@Url url: String): Call<UserDetailModul>
 
     @GET
-    @Headers("Authorization:4092804f73496360affddeb05df2dd7d5ecf5383")
+    @Headers("Authorization: Token 4092804f73496360affddeb05df2dd7d5ecf5383")
     fun getFollow(@Url follow: String): Call<ArrayList<UserModul>>
 
 

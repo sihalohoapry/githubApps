@@ -39,6 +39,7 @@ class DetailUserActivity : AppCompatActivity() {
     companion object{
         const val EXTRA_USER = "extra_user"
         const val EXTRA_NAME = "extra_name"
+        const val EXTRA_ID = "extra_id"
         const val EXTRA_FAV = "extra_fav"
         const val EXTRA_POSITION_FAV = "extra_position_fav"
 
@@ -51,7 +52,6 @@ class DetailUserActivity : AppCompatActivity() {
         view_pager.adapter = sectionsPagerAdapter
         tabs.setupWithViewPager(view_pager)
         supportActionBar?.elevation = 0f
-
         progressBar = ProgressDialog(this)
         progressBar.setMessage("Mohon Tunggu")
         getDetailUSer()
@@ -103,7 +103,9 @@ class DetailUserActivity : AppCompatActivity() {
         if (result > 0) {
             contentResolver.insert(CONTENT_URI, values)
             Toast.makeText(this, "Berhasil menambahkan ke favorite", Toast.LENGTH_SHORT).show()
-        } else {
+        }
+
+        else {
             uriWithId = Uri.parse(CONTENT_URI.toString() + "/" + data?.id)
             contentResolver.delete(uriWithId, null, null)
             Toast.makeText(this,"Berhasil Dihapus", Toast.LENGTH_SHORT).show()
@@ -135,14 +137,14 @@ class DetailUserActivity : AppCompatActivity() {
 
                         if (response.isSuccessful) {
                             val data = response.body()
-                            tv_nama.text = data?.name
-                            tv_nickname.text = data?.login
-                            tv_alamat.text = data?.location
+                            tvNama.text = data?.name
+                            tvNickName.text = data?.login
+                            tvAlamat.text = data?.location
                             if (data?.location.isNullOrBlank()) {
-                                tv_alamat.text = getString(R.string.nolocation)
+                                tvAlamat.text = getString(R.string.nolocation)
                             }
-                            tv_followers.text = data?.followers.toString()
-                            tv_following.text = data?.following.toString()
+                            tvFollowers.text = data?.followers.toString()
+                            tvFollowing.text = data?.following.toString()
                             Glide.with(baseContext)
                                 .load(data?.avatar_url)
                                 .apply(RequestOptions.circleCropTransform())
@@ -157,31 +159,37 @@ class DetailUserActivity : AppCompatActivity() {
 
                 })
         }
+
         if (data == null){
+            fab_favorite.visibility = View.GONE
+            fab_delete.visibility = View.VISIBLE
             val login =intent.getStringExtra(EXTRA_NAME)
+            fab_delete.setOnClickListener {
+                val id =intent.getStringExtra(EXTRA_ID)
+                uriWithId = Uri.parse("$CONTENT_URI/$id")
+                contentResolver.delete(uriWithId, null, null)
+                Toast.makeText(this,"Berhasil Dihapus", Toast.LENGTH_SHORT).show()
+            }
             RetrofitClient.instance.getDetailUser("https://api.github.com/users/$login")
                 .enqueue(object : Callback<UserDetailModul> {
                     override fun onFailure(call: Call<UserDetailModul>, t: Throwable) {
                         Toast.makeText(this@DetailUserActivity, "$t", Toast.LENGTH_LONG).show()
                     }
-
-
                     override fun onResponse(
                         call: Call<UserDetailModul>,
                         response: Response<UserDetailModul>
                     ) {
 
-                        fab_favorite.visibility = View.GONE
                         if (response.isSuccessful) {
                             val data = response.body()
-                            tv_nama.text = data?.name
-                            tv_nickname.text = data?.login
-                            tv_alamat.text = data?.location
+                            tvNama.text = data?.name
+                            tvNickName.text = data?.login
+                            tvAlamat.text = data?.location
                             if (data?.location.isNullOrBlank()) {
-                                tv_alamat.text = getString(R.string.nolocation)
+                                tvAlamat.text = getString(R.string.nolocation)
                             }
-                            tv_followers.text = data?.followers.toString()
-                            tv_following.text = data?.following.toString()
+                            tvFollowers.text = data?.followers.toString()
+                            tvFollowing.text = data?.following.toString()
                             Glide.with(baseContext)
                                 .load(data?.avatar_url)
                                 .apply(RequestOptions.circleCropTransform())
