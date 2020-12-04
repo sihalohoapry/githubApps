@@ -36,7 +36,7 @@ class DetailUserActivity : AppCompatActivity() {
     private var isFav = false
     private lateinit var uriWithId: Uri
 
-    companion object{
+    companion object {
         const val EXTRA_USER = "extra_user"
         const val EXTRA_NAME = "extra_name"
         const val EXTRA_ID = "extra_id"
@@ -44,6 +44,7 @@ class DetailUserActivity : AppCompatActivity() {
         const val EXTRA_POSITION_FAV = "extra_position_fav"
 
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail_user)
@@ -103,12 +104,10 @@ class DetailUserActivity : AppCompatActivity() {
         if (result > 0) {
             contentResolver.insert(CONTENT_URI, values)
             Toast.makeText(this, "Berhasil menambahkan ke favorite", Toast.LENGTH_SHORT).show()
-        }
-
-        else {
+        } else {
             uriWithId = Uri.parse(CONTENT_URI.toString() + "/" + data?.id)
             contentResolver.delete(uriWithId, null, null)
-            Toast.makeText(this,"Berhasil Dihapus", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Berhasil Dihapus", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -118,8 +117,7 @@ class DetailUserActivity : AppCompatActivity() {
         progressBar.show()
         val data = intent.getParcelableExtra<UserModul?>(EXTRA_USER)
 
-        if (data != null)
-        {
+        if (data != null) {
             val data = intent.getParcelableExtra<UserModul?>(EXTRA_USER)
 
             val tvLogin = data?.login.toString()
@@ -160,21 +158,22 @@ class DetailUserActivity : AppCompatActivity() {
                 })
         }
 
-        if (data == null){
+        if (data == null) {
             fab_favorite.visibility = View.GONE
             fab_delete.visibility = View.VISIBLE
-            val login =intent.getStringExtra(EXTRA_NAME)
+            val login = intent.getStringExtra(EXTRA_NAME)
             fab_delete.setOnClickListener {
-                val id =intent.getStringExtra(EXTRA_ID)
+                val id = intent.getStringExtra(EXTRA_ID)
                 uriWithId = Uri.parse("$CONTENT_URI/$id")
                 contentResolver.delete(uriWithId, null, null)
-                Toast.makeText(this,"Berhasil Dihapus", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Berhasil Dihapus", Toast.LENGTH_SHORT).show()
             }
             RetrofitClient.instance.getDetailUser("https://api.github.com/users/$login")
                 .enqueue(object : Callback<UserDetailModul> {
                     override fun onFailure(call: Call<UserDetailModul>, t: Throwable) {
                         Toast.makeText(this@DetailUserActivity, "$t", Toast.LENGTH_LONG).show()
                     }
+
                     override fun onResponse(
                         call: Call<UserDetailModul>,
                         response: Response<UserDetailModul>

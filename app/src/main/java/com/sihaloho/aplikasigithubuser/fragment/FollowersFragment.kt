@@ -54,7 +54,7 @@ class FollowersFragment : Fragment() {
         val followViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(
             FollowViewModel::class.java)
         followViewModel.setFollowers(login)
-        followViewModel.getFollowe().observe(this, Observer { userItems ->
+        followViewModel.getFollowe().observe(viewLifecycleOwner, Observer { userItems ->
             if (userItems != null) {
                 adapter.setData(userItems)
             }
